@@ -1,14 +1,15 @@
 <template>
     <div>
-        <slot />
+        <div class="w-full bg-indigo-600 p-4">
+            <h1 class="font-semibold text-lg text-white">Tic tac toe advanced</h1>
+        </div>
+        <slot/>
     </div>
 </template>
 
 <script>
-import Navbar from "./components/Navbar";
 export default {
-name: "Layout",
-    components: {Navbar}
+    name: "Layout",
 }
 </script>
 

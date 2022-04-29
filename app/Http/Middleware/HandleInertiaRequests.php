@@ -40,6 +40,7 @@ class HandleInertiaRequests extends Middleware
     {
         $translationSupport = new TranslationSupport();
         return array_merge(parent::share($request), [
+            'user' => $request->user(),
             'translations' => $translationSupport->getTranslationStrings(),
         ]);
     }

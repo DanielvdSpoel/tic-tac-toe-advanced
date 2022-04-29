@@ -9,7 +9,7 @@
     <script src="https://kit.fontawesome.com/ddae002269.js" crossorigin="anonymous"></script>
     @inertiaHead
 </head>
-<body>
+<body class="bg-gray-100">
 @inertia
 </body>
 </html>
