@@ -46,7 +46,10 @@ export default {
             .listen('GameStartedEvent', (e) => {
                 console.log("Game started!")
                 this.$inertia.reload();
-            });
+            })
+            .listen('GameUpdatedEvent', (e) => {
+                console.log("Event received", e);
+            })
     }
 }
 </script>

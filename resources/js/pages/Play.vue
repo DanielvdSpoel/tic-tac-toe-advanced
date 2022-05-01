@@ -1,11 +1,20 @@
 <template>
     <Layout>
+        <GameFinishedModal
+            v-if="finishedModel.isOpen"
+            :winner="finishedModel.winner"
+            :status="finishedModel.status"
+        />
         <div v-if="gameLoaded" class="md:flex gap-8 mx-4 h-[88vh]">
             <div class="w-full md:h-full my-4 flex justify-center items-center">
                 <div class="w-full max-w-xl bg-indigo-600">
                     <ul class="grid grid-cols-3 gap-1 aspect-square">
-                        <li v-for="position in positions" :key="position.id" class="bg-gray-100 flex justify-center items-center hover:bg-gray-200">
-                            <GamePiece :selectable="true" :number="1" color="red"/>
+                        <li v-for="position in positions" :key="position.id" class="bg-gray-100 flex justify-center items-center aspect-square" :class="{
+                            'hover:bg-gray-200': placingPiece !== null && isPossibleMove(position),
+                            'bg-gray-300': isPossibleMove(position),
+                        }" @click="placePiece(position)">
+
+                            <GamePiece v-if="position.piece" :selectable="false" :piece="position.piece" :color="getPlayerColor(position.piece.player_id)"/>
                         </li>
                     </ul>
                 </div>
@@ -15,8 +24,9 @@
                     <h3 v-if="authPlayer.id === player.id" class="font-medium text-gray-700">{{ $t('game.play.player_pieces')}}</h3>
                     <h3 v-else class="font-medium text-gray-700">{{ $t('game.play.opponent_pieces')}}</h3>
                     <div class="mt-2 flex flex-wrap gap-2">
-                        <GamePiece v-for="piece in player.availablePieces" :key="piece.id"
-                            :selectable="authPlayer.id === player.id ? canPlacePiece : false" :number="parseInt(piece.value)" :color="player.color"/>
+                        <GamePiece v-for="piece in player.availablePieces" :key="piece.id" :color="player.color"
+                            :selectable="authPlayer.id === player.id ? canPlacePiece : false"
+                                   :piece="piece" :selectedPiece="placingPiece" @selectPiece="placingPiece = piece"/>
                     </div>
                 </div>
             </div>
@@ -38,14 +48,21 @@
 <script>
 import Layout from "../Layout";
 import GamePiece from "../components/GamePiece";
+import GameFinishedModal from "../components/GameFinishedModal";
 export default {
     name: "Play",
-    components: {GamePiece, Layout},
+    components: {GameFinishedModal, GamePiece, Layout},
     props: {
         game: Object
     },
     data() {
         return {
+            finishedModel: {
+                isOpen: false,
+                status: null,
+                winner: null,
+            },
+            placingPiece: null,
             gameLoaded: false,
             positions: [],
             players: [],
@@ -53,20 +70,60 @@ export default {
         }
     },
     mounted() {
+        console.log('mounted')
+        console.log(this.authPlayer)
         Echo.private(`games.${this.game.id}`)
             .listen('GameUpdatedEvent', (e) => {
-                console.log("Game updated!")
-                console.log(this.gameLoaded)
-                this.gameLoaded = true
-                this.positions = e.positions
-                this.players = e.players
-                this.canPlacePiece = e.game.current_playing_player === this.authPlayer.id
+                console.log('updated')
                 console.log(e)
+                this.gameLoaded = true
+                this.positions = e.game.positions
+                this.players = e.game.players
+                this.canPlacePiece = e.game.playing_player_id === this.authPlayer.id
+            })
+            .listen('GameFinishedEvent', (e) => {
+                console.log('updated')
+                console.log(e)
+                this.finishedModel.isOpen = true
+                this.finishedModel.status = e.status
+                this.finishedModel.winner = e.winner
             });
+
+        if (this.game.positions.length !== 0) {
+            this.gameLoaded = true
+            this.positions = this.game.positions
+            this.players = this.game.players
+            this.canPlacePiece = this.game.playing_player_id === this.authPlayer.id
+        }
     },
     computed: {
         authPlayer() {
             return this.$page.props.user
+        }
+    },
+    methods: {
+        getPlayerColor(id) {
+            return this.players.find(player => player.id === id).color
+        },
+        placePiece(position) {
+            if (!this.isPossibleMove(position)) {
+                return
+            }
+            this.$inertia.patch(route('gamePositions.update', position), {
+                piece_id: this.placingPiece.id
+            }, {
+                onSuccess: page => {
+                    this.placingPiece = null
+                },
+            })
+        },
+        isPossibleMove(position) {
+            if (!this.placingPiece) return false;
+            if (position.piece) {
+                return position.piece.value < this.placingPiece.value
+            } else {
+                return true
+            }
         }
     }
 }

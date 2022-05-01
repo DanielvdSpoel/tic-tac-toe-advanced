@@ -19,5 +19,22 @@ return [
         'player_pieces' => 'Jouw resterende stukken:',
         'opponent_pieces' => 'Resterende stukken van de tegenstander:',
         'loading' => 'Laden...',
+    ],
+    'finished' => [
+        'restart' => 'Spel opnieuw spelen',
+         'draw' => [
+             'title' => 'Gelijkspel',
+             'description' => 'Het spel is gedaan met gelijkspel. Wellicht volgende keer beter!',
+         ],
+        'win' => [
+            'you' => [
+                'title' => 'Je hebt gewonnen!',
+                'description' => 'Gefeliciteerd, je hebt gewonnen! Wil je het nog een keertje proberen?',
+            ],
+            'opponent' => [
+                'title' => 'Je hebt verloren!',
+                'description' => 'Helaas, je hebt verloren! Wil je het nog een keertje proberen?',
+            ],
+        ]
     ]
 ];

@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('games.{gameId}', function ($user, $gameId) {
+    ray("Fired");
+    ray($user->game_id === $gameId);
     return $user->game_id === $gameId;
 });

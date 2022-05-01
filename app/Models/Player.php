@@ -27,7 +27,7 @@ class Player extends Authenticatable
 
     public function getAvailablePiecesAttribute(): Collection
     {
-        return $this->pieces()->whereNull('game_position_id')->get();
+        return $this->pieces()->whereNull('game_position_id')->where('deleted', false)->get();
     }
 
     public function game(): BelongsTo

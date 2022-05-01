@@ -12,15 +12,13 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GameUpdatedEvent implements ShouldBroadcast
+class GameFinishedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * The game that was updated.
-     *
-     */
     public $game;
+    public $winner;
+    public $status;
 
 
     /**
@@ -28,21 +26,14 @@ class GameUpdatedEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Game $game)
+    public function __construct(Game $game, string $status, string $winner=null)
     {
         $this->game = $game;
-    }
+        $this->status = $status;
+        if ($status === 'win') {
+            $this->winner = $game->players()->where('color', $winner)->first();;
 
-    /**
-     * Get the data to broadcast.
-     *
-     * @return array
-     */
-    public function broadcastWith(): array
-    {
-        return [
-            'game' => $this->game->load(['positions', 'positions.piece', 'players'])
-        ];
+        }
     }
 
     /**

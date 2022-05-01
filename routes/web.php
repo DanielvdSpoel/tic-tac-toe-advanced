@@ -2,6 +2,7 @@
 
 use App\Events\GameUpdatedEvent;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\GamePositionController;
 use App\Models\Game;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,7 @@ Route::get('/games/{game}/join', [GameController::class, 'showJoin'])->name('gam
 Route::post('/games/{game}/join', [GameController::class, 'join'])->name('games.join');
 
 Route::resource('games', GameController::class);
+
+Route::patch('/gamePositions/{gamePosition}', [GamePositionController::class, 'update'])->name('gamePositions.update');
 
 Route::redirect('/', \route('games.create'));

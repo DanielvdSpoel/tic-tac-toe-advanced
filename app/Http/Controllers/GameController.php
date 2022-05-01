@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\GameStartedEvent;
+use App\Events\GameUpdatedEvent;
 use App\Http\Requests\JoinGameRequest;
 use App\Http\Requests\StoreGameRequest;
 use App\Models\Game;
+use App\Supports\GameStatusSupport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -46,6 +48,11 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
+        if ($game->is_finished) {
+            dd("Game is al gestopt");
+        }
+
+        $game->load(['players', 'positions', 'positions.piece', 'positions.piece.player']);
         if (!$game->is_started) {
             return Inertia::render('Waiting', [
                 'game' => $game
@@ -76,13 +83,13 @@ class GameController extends Controller
         $data = $request->validated();
         $player = $game->players()->create([
             'name' => $data['name'],
-            'color' => $game->players()->first()->color¶ === 'red' ? 'blue' : 'red'
+            'color' => $game->players()->first()->color === 'red' ? 'blue' : 'red'
         ]);
         Auth::login($player);
 
         $game->update([
             'is_started' => true,
-            'playing_player_id' => $player->id,
+            'playing_player_id' => $game->players()->first()->id,
         ]);
 
         GameStartedEvent::dispatch($game);

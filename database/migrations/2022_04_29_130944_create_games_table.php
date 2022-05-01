@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->boolean('is_started')->default(false);
+            $table->boolean('is_finished')->default(false);
             $table->uuid('playing_player_id')->nullable();
             $table->timestamps();
         });

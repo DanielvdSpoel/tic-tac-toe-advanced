@@ -17,7 +17,9 @@ class Game extends Model
      * @var string[]
      */
     protected $fillable = [
+        'is_finished',
         'is_started',
+        'playing_player_id',
     ];
 
     public function players(): HasMany

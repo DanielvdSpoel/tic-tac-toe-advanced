@@ -18,6 +18,8 @@ class GamePiece extends Model
      */
     protected $fillable = [
         'value',
+        'deleted',
+        'game_position_id',
     ];
 
     public function player(): BelongsTo
