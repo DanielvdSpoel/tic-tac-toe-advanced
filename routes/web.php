@@ -20,7 +20,7 @@ Route::get('/{game}', function (Game $game) {
     GameUpdatedEvent::dispatch($game);
 });
 Route::get('/games/{game}/join', [GameController::class, 'showJoin'])->name('games.join');
-Route::post('/games/{game}/join', [GameController::class, 'join'])->name('games.join');
+Route::post('/games/{game}/join', [GameController::class, 'join'])
 
 Route::resource('games', GameController::class);
 
