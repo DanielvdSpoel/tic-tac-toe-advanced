@@ -82,7 +82,7 @@ export default {
                 this.canPlacePiece = e.game.playing_player_id === this.authPlayer.id
             })
             .listen('GameFinishedEvent', (e) => {
-                console.log('updated')
+                console.log('finished')
                 console.log(e)
                 this.finishedModel.isOpen = true
                 this.finishedModel.status = e.status
