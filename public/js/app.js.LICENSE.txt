@@ -1,29 +1,23 @@
 /*!
-  * @intlify/core-base v9.1.9
-  * (c) 2021 kazuya kawaguchi
+  * devtools-if v9.2.2
+  * (c) 2022 kazuya kawaguchi
   * Released under the MIT License.
   */
 
 /*!
-  * @intlify/devtools-if v9.1.9
-  * (c) 2021 kazuya kawaguchi
+  * message-compiler v9.2.2
+  * (c) 2022 kazuya kawaguchi
   * Released under the MIT License.
   */
 
 /*!
-  * @intlify/runtime v9.1.9
-  * (c) 2021 kazuya kawaguchi
+  * shared v9.2.2
+  * (c) 2022 kazuya kawaguchi
   * Released under the MIT License.
   */
 
 /*!
-  * @intlify/vue-devtools v9.1.9
-  * (c) 2021 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-
-/*!
- * Pusher JavaScript Library v7.0.6
+ * Pusher JavaScript Library v7.4.0
  * https://pusher.com/
  *
  * Copyright 2020, Pusher
